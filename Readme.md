@@ -4,10 +4,10 @@ Call it by running bin/Release/collatz.exe with parameters.
 
 Arguments:
 
-arg 1:	required: number to test (in millions)
-nc:		optional: do not calculate longest chain
--b <int>: optional: number of parallel iterations (defaults to 40)
--h <int>: optional: history_size in millions (defaults to 100)
+- arg 1:	required: number to test (in millions)
+- 'nc':		optional: do not calculate longest chain
+- '-b' <int>: optional: number of parallel iterations (defaults to 40)
+- '-h' <int>: optional: history_size in millions (defaults to 100)
   
 eg.
   collatz.exe 10     // tests all numbers between 1 and 10 million. Does not calculate the longest chain
