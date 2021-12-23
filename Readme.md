@@ -10,7 +10,7 @@ Arguments:
 - '-h' <int>: optional: history_size in millions (defaults to 100)
   
 eg.
-  collatz.exe 10     // tests all numbers between 1 and 10 million. Does not calculate the longest chain
-  collatz.exe 10 nc  // test all numbers between 1 and 10 million and calculate longest chain
+  - collatz.exe 10     // tests all numbers between 1 and 10 million. Does not calculate the longest chain
+  - collatz.exe 10 nc  // test all numbers between 1 and 10 million and calculate longest chain
  
 depending on the system it is running, optimisations can be made using the '-b' and '-h' parameters. The defaults were picked based on my laptop performance.
