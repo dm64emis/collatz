@@ -4,13 +4,10 @@ Call it by running bin/Release/collatz.exe with parameters.
 
 Arguments:
 
-- arg 1:	required: number to test (in millions)
-- 'nc':		optional: do not calculate longest chain
-- '-b' <int>: optional: number of parallel iterations (defaults to 40)
-- '-h' <int>: optional: history_size in millions (defaults to 100)
+- arg 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= required: number to test (in millions)
+- '-xc \<int\>' = optional: do not calculate longest chain. This paramater has an optional \<int\> to set the size of the history array in millions (defaults to 40)
   
 eg.
-  - collatz.exe 10     // tests all numbers between 1 and 10 million. Does not calculate the longest chain
-  - collatz.exe 10 nc  // test all numbers between 1 and 10 million and calculate longest chain
- 
-depending on the system it is running, optimisations can be made using the '-b' and '-h' parameters. The defaults were picked based on my laptop performance.
+  - collatz.exe 10 &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;// test all numbers between 1 and 10 million. Does not calculate the longest chain
+  - collatz.exe 10 -xc &nbsp;  &nbsp;  &nbsp;// test all numbers between 1 and 10 million and calculate longest chain. History array set to defaults size 40 million
+  - collatz.exe 10 -xc 10 // test all numbers between 1 and 10 million and calculate longest chain. History array set to size 40 million
