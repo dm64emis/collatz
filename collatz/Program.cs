@@ -13,6 +13,8 @@ namespace Collatz
 		static bool _calculateChain = true;
 		static long _maxChainSeed = 1;
 		static long _maxChainLength = 1;
+		static bool _optimize = false;
+		static TimeSpan _min_ts = new TimeSpan(0,0,10,0); // initialize to 10 minutes
 
 		static void Main(string[] args)
 		{
@@ -26,18 +28,61 @@ namespace Collatz
 Arguments:
 arg1       = required: number to test in millions (defaults to 100 million)
 '-x'       = optional: do not calculate longest chain.
-'-h <int>  = optional: set the size of the history array in millions (defaults to 40)");
+'-h <int>  = optional: set the size of the history array in millions (defaults to 40)
+'-o'       = optional: find the optimal value for h by running the test with h = 10 to 250 in steps of 10 (-h parameter ignored if -o provided");
 
 				return;
 			}
 
-			if (_calculateChain)
-				TestCollatz_c1();
-			else
-				TestCollatz_xc0();
+			if (_optimize)
+			{
+				if (_calculateChain)
+					TestOptimize(TestCollatz_c1);
+				else
+					TestOptimize(TestCollatz_xc0);
 
-			stopWatch.Stop();
-			ReportSummary(stopWatch.Elapsed);
+				Console.WriteLine();
+			}
+			else
+			{
+				if (_calculateChain)
+					TestCollatz_c1();
+				else
+					TestCollatz_xc0();
+
+				stopWatch.Stop();
+				_min_ts = stopWatch.Elapsed;
+			}
+			
+			ReportSummary(_min_ts, shortOutput: false);
+			Console.WriteLine("Press any key to exit ...");
+			Console.ReadLine();
+		}
+
+		private static void TestOptimize(Action collatzTest)
+		{
+			Stopwatch stopWatch = new Stopwatch();
+			TimeSpan ts;
+			long min_history_size = 0;
+
+			for (int h = 10; h < 250; h+=10)
+			{
+				_history_size = h * 1000000;
+				stopWatch.Reset();
+				stopWatch.Start();
+				collatzTest();
+				stopWatch.Stop();
+				ts = stopWatch.Elapsed;
+				ReportSummary(ts, shortOutput: true);
+
+				if (ts < _min_ts)
+				{
+					_min_ts = ts;
+					min_history_size = _history_size;
+				}
+			}
+
+			_history_size = min_history_size;
 		}
 
 		private static bool TryParseArgs(string[] args)
@@ -59,6 +104,9 @@ arg1       = required: number to test in millions (defaults to 100 million)
 					case "-h":
 						i++;
 						_history_size = Int32.Parse(args[i]) * 1000000;
+						break;
+					case "-o":
+						_optimize = true;
 						break;
 					default:
 						return false;
@@ -196,25 +244,28 @@ arg1       = required: number to test in millions (defaults to 100 million)
 			Console.WriteLine($"Min Run Time: {runTime}, h: {hMin}");
 		}
 
-		private static void ReportSummary(TimeSpan ts)
+		private static void ReportSummary(TimeSpan ts, bool shortOutput)
 		{
-			string runTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+			string runTime = String.Format("{0:00}:{1:000}", ts.Seconds, ts.Milliseconds);
 
-			Console.WriteLine($"{"Number Under Test:", -25} {_numberToTest}");
-			Console.WriteLine($"{"Run Time:", -25} {runTime}");
-
-			Console.WriteLine($"{"Calculate Chain:", -25} {_calculateChain}");
-
-			if (_calculateChain)
+			if (shortOutput)
 			{
-				Console.WriteLine($"{"Longest Chain Seed:", -25} {_maxChainSeed}");
-				Console.WriteLine($"{"Longest Chain Length:", -25} {_maxChainLength}");
+				Console.WriteLine($"History Size: {_history_size}, Time: {runTime}");
 			}
+			else
+			{
+				Console.WriteLine($"{"Number Under Test:", -25} {_numberToTest}");
+				Console.WriteLine($"{"History Size:", -25} {_history_size}");
+				Console.WriteLine($"{"Run Time:", -25} {runTime}");
 
-			Console.WriteLine($"{"History Size:", -25} {_history_size}");
+				Console.WriteLine($"{"Calculate Chain:", -25} {_calculateChain}");
 
-			Console.WriteLine("Press any key to exit ...");
-			Console.ReadLine();
+				if (_calculateChain)
+				{
+					Console.WriteLine($"{"Longest Chain Seed:", -25} {_maxChainSeed}");
+					Console.WriteLine($"{"Longest Chain Length:", -25} {_maxChainLength}");
+				}
+			}
 		}
 	}
 }
