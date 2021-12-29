@@ -29,7 +29,7 @@ Arguments:
 arg1       = required: number to test in millions (defaults to 100 million)
 '-x'       = optional: do not calculate longest chain.
 '-h <int>  = optional: set the size of the history array in millions (defaults to 40)
-'-o'       = optional: find the optimal value for h by running the test with h = 10 to 250 in steps of 10 (-h parameter ignored if -o provided");
+'-o'       = optional: find the optimal value for h by running the test with h = 10 to 130 in steps of 10 (-h parameter ignored if -o provided");
 
 				return;
 			}
@@ -65,7 +65,7 @@ arg1       = required: number to test in millions (defaults to 100 million)
 			TimeSpan ts;
 			long min_history_size = 0;
 
-			for (int h = 10; h < 250; h+=10)
+			for (int h = 10; h <= 130; h+=10)
 			{
 				_history_size = h * 1000000;
 				stopWatch.Reset();
@@ -215,42 +215,13 @@ arg1       = required: number to test in millions (defaults to 100 million)
 			});
 		}
 
-		private static void TestCollatz_history_size(Stopwatch stopWatch)
-		{
-			TimeSpan tsMin = new TimeSpan(0);
-			int hMin = 0;
-			string runTime;
-
-			for (int h = 1; h < 100; h++)
-			{
-				_history_size = h * 1000000;
-				stopWatch.Reset();
-				stopWatch.Start();
-				TestCollatz_c1();
-				stopWatch.Stop();
-				TimeSpan ts = stopWatch.Elapsed;
-
-				if (ts < tsMin)
-				{
-					tsMin = ts;
-					hMin = h;
-				}
-
-				runTime = String.Format("{0:00}.{1:00}", ts.Seconds, ts.Milliseconds / 10);
-				Console.WriteLine($"Run Time: {runTime}, h: {h}");
-			}
-
-			runTime = String.Format("{0:00}.{1:00}", tsMin.Seconds, tsMin.Milliseconds / 10);
-			Console.WriteLine($"Min Run Time: {runTime}, h: {hMin}");
-		}
-
 		private static void ReportSummary(TimeSpan ts, bool shortOutput)
 		{
 			string runTime = String.Format("{0:00}:{1:000}", ts.Seconds, ts.Milliseconds);
 
 			if (shortOutput)
 			{
-				Console.WriteLine($"History Size: {_history_size}, Time: {runTime}");
+				Console.WriteLine($"History Size: {_history_size, 9}, Time: {runTime}");
 			}
 			else
 			{
