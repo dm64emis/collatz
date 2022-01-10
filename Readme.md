@@ -7,7 +7,7 @@ To build this application you will require the .NET 6 SDK.
 
 ## Building
 
-**A pre-built version for Linux ARM64 (e.g. EC2 m6g) is in https://github.com/dm64emis/collatz/tree/main/bin/Release/net6.0/linux-arm64)**
+**A pre-built version for Linux ARM64 (e.g. EC2 m6g) is in https://github.com/dm64emis/collatz/tree/master/_release/net6.0/linux-arm64)**
 
 To build for your machine runtime:
 
